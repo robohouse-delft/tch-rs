@@ -874,13 +874,6 @@ void atg__symeig_helper(tensor *out__, tensor self, int eigenvectors, int upper)
   )
 }
 
-void atg__test_optional_float(tensor *out__, tensor self, double scale) {
-  PROTECT(
-    auto outputs__ = torch::_test_optional_float(*self, scale);
-    out__[0] = new torch::Tensor(outputs__);
-  )
-}
-
 void atg__triangular_solve_helper(tensor *out__, tensor self, tensor A, int upper, int transpose, int unitriangular) {
   PROTECT(
     auto outputs__ = torch::_triangular_solve_helper(*self, *A, (bool)upper, (bool)transpose, (bool)unitriangular);
@@ -2360,13 +2353,6 @@ void atg_cudnn_convolution(tensor *out__, tensor self, tensor weight, tensor bia
   )
 }
 
-void atg_cudnn_convolution_backward_bias(tensor *out__, tensor grad_output) {
-  PROTECT(
-    auto outputs__ = torch::cudnn_convolution_backward_bias(*grad_output);
-    out__[0] = new torch::Tensor(outputs__);
-  )
-}
-
 void atg_cudnn_convolution_backward_input(tensor *out__, int64_t *self_size_data, int self_size_len, tensor grad_output, tensor weight, int64_t *padding_data, int padding_len, int64_t *stride_data, int stride_len, int64_t *dilation_data, int dilation_len, int64_t groups, int benchmark, int deterministic) {
   PROTECT(
     auto outputs__ = torch::cudnn_convolution_backward_input(torch::IntArrayRef(self_size_data, self_size_len), *grad_output, *weight, torch::IntArrayRef(padding_data, padding_len), torch::IntArrayRef(stride_data, stride_len), torch::IntArrayRef(dilation_data, dilation_len), groups, (bool)benchmark, (bool)deterministic);
@@ -2384,13 +2370,6 @@ void atg_cudnn_convolution_backward_weight(tensor *out__, int64_t *weight_size_d
 void atg_cudnn_convolution_transpose(tensor *out__, tensor self, tensor weight, tensor bias, int64_t *padding_data, int padding_len, int64_t *output_padding_data, int output_padding_len, int64_t *stride_data, int stride_len, int64_t *dilation_data, int dilation_len, int64_t groups, int benchmark, int deterministic) {
   PROTECT(
     auto outputs__ = torch::cudnn_convolution_transpose(*self, *weight, (bias ? *bias : torch::Tensor()), torch::IntArrayRef(padding_data, padding_len), torch::IntArrayRef(output_padding_data, output_padding_len), torch::IntArrayRef(stride_data, stride_len), torch::IntArrayRef(dilation_data, dilation_len), groups, (bool)benchmark, (bool)deterministic);
-    out__[0] = new torch::Tensor(outputs__);
-  )
-}
-
-void atg_cudnn_convolution_transpose_backward_bias(tensor *out__, tensor grad_output) {
-  PROTECT(
-    auto outputs__ = torch::cudnn_convolution_transpose_backward_bias(*grad_output);
     out__[0] = new torch::Tensor(outputs__);
   )
 }
@@ -3997,14 +3976,7 @@ void atg_leaky_relu_(tensor *out__, tensor self) {
 
 void atg_leaky_relu_backward(tensor *out__, tensor grad_output, tensor self, scalar negative_slope) {
   PROTECT(
-    auto outputs__ = torch::leaky_relu_backward(*grad_output, *self, *negative_slope);
-    out__[0] = new torch::Tensor(outputs__);
-  )
-}
-
-void atg_leaky_relu_backward_out(tensor *out__, tensor grad_input, tensor grad_output, tensor self, scalar negative_slope) {
-  PROTECT(
-    auto outputs__ = torch::leaky_relu_backward_out(*grad_input, *grad_output, *self, *negative_slope);
+    auto outputs__ = torch::leaky_relu_backward(*grad_output, *self, *negative_slope, false);
     out__[0] = new torch::Tensor(outputs__);
   )
 }
@@ -6394,14 +6366,7 @@ void atg_rrelu_with_noise_(tensor *out__, tensor self, tensor noise, int trainin
 
 void atg_rrelu_with_noise_backward(tensor *out__, tensor grad_output, tensor self, tensor noise, scalar lower, scalar upper, int training) {
   PROTECT(
-    auto outputs__ = torch::rrelu_with_noise_backward(*grad_output, *self, *noise, *lower, *upper, (bool)training);
-    out__[0] = new torch::Tensor(outputs__);
-  )
-}
-
-void atg_rrelu_with_noise_backward_out(tensor *out__, tensor grad_input, tensor grad_output, tensor self, tensor noise, scalar lower, scalar upper, int training) {
-  PROTECT(
-    auto outputs__ = torch::rrelu_with_noise_backward_out(*grad_input, *grad_output, *self, *noise, *lower, *upper, (bool)training);
+    auto outputs__ = torch::rrelu_with_noise_backward(*grad_output, *self, *noise, *lower, *upper, (bool)training, false);
     out__[0] = new torch::Tensor(outputs__);
   )
 }
