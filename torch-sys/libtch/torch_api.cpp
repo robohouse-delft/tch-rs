@@ -402,14 +402,12 @@ void at_run_backward(tensor *tensors,
 }
 
 optimizer ato_adam(double learning_rate,
-                   double beta1,
-                   double beta2,
+                   std::tuple<double, double> betas,
                    double weight_decay) {
   PROTECT(
     auto options =
       torch::optim::AdamOptions(learning_rate)
-        .beta1(beta1)
-        .beta2(beta2)
+        .betas(betas)
         .weight_decay(weight_decay);
     return new torch::optim::Adam(vector<torch::Tensor>(), options);
   )
@@ -458,14 +456,14 @@ void ato_add_parameters(optimizer t, tensor *tensors, int ntensors) {
   )
 }
 
-void ato_set_learning_rate(optimizer t, double learning_rate) {
+void ato_set_learning_rate(optimizer t, double lr) {
   PROTECT(
-    if (auto adam = dynamic_cast<torch::optim::Adam*>(t))
-      adam->options.learning_rate(learning_rate);
-    else if (auto rms = dynamic_cast<torch::optim::RMSprop*>(t))
-      rms->options.learning_rate(learning_rate);
-    else if (auto sgd = dynamic_cast<torch::optim::SGD*>(t))
-      sgd->options.learning_rate(learning_rate);
+    if (auto adam_options = dynamic_cast<torch::optim::AdamOptions*>(&t->defaults()))
+      adam_options->lr(lr);
+    else if (auto rms_options = dynamic_cast<torch::optim::RMSpropOptions*>(&t->defaults()))
+      rms_options->lr(lr);
+    else if (auto sgd_options = dynamic_cast<torch::optim::SGDOptions*>(&t->defaults()))
+      sgd_options->lr(lr);
     else
       throw std::invalid_argument("unexpected optimizer");
   )
@@ -473,12 +471,12 @@ void ato_set_learning_rate(optimizer t, double learning_rate) {
 
 void ato_set_momentum(optimizer t, double momentum) {
   PROTECT(
-    if (auto adam = dynamic_cast<torch::optim::Adam*>(t))
-      adam->options.beta1(momentum);
-    else if (auto rms = dynamic_cast<torch::optim::RMSprop*>(t))
-      rms->options.momentum(momentum);
-    else if (auto sgd = dynamic_cast<torch::optim::SGD*>(t))
-      sgd->options.momentum(momentum);
+    if (auto adam_options = dynamic_cast<torch::optim::AdamOptions*>(&t->defaults()))
+      std::get<0>(adam_options->betas()) = momentum;
+    else if (auto rms_options = dynamic_cast<torch::optim::RMSpropOptions*>(&t->defaults()))
+      rms_options->momentum(momentum);
+    else if (auto sgd_options = dynamic_cast<torch::optim::SGDOptions*>(&t->defaults()))
+      sgd_options->momentum(momentum);
     else
      throw std::invalid_argument("unexpected optimizer");
   )
