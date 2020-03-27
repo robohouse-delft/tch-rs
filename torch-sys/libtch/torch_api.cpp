@@ -717,7 +717,7 @@ int ati_tag(ivalue i) {
     else if (i->isBoolList()) return 8;
     else if (i->isString()) return 9;
     else if (i->isTensorList()) return 10;
-    else if (i->isGenericList()) return 12;
+    else if (i->isList()) return 12;
     else if (i->isGenericDict()) return 13;
     throw std::invalid_argument(("unsupported tag" + i->tagKind()).c_str());
     return -1;
@@ -769,7 +769,7 @@ int ati_length(ivalue i) {
     else if (i->isBoolList()) return i->toBoolList().size();
     else if (i->isString()) return i->toStringRef().size();
     else if (i->isTensorList()) return i->toTensorList().size();
-    else if (i->isGenericList()) return i->toGenericList().size();
+    else if (i->isList()) return i->toList().size();
     else if (i->isGenericDict()) return i->toGenericDict().size();
     throw std::invalid_argument(("unsupported tag for length " + i->tagKind()).c_str());
     return -1;
@@ -801,7 +801,7 @@ void ati_to_generic_list(ivalue i,
                          ivalue *outputs,
                          int noutputs) {
   PROTECT(
-    auto vec = i->toGenericList();
+    auto vec = i->toList();
     if (vec.size() != noutputs) {
       throw std::invalid_argument("unexpected list size");
     }
