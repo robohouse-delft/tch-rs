@@ -138,7 +138,7 @@ fn make<P: AsRef<Path>>(libtorch: P) {
                     "-Wl,-rpath={}",
                     libtorch.as_ref().join("lib").display()
                 ))
-                .flag("-std=c++11")
+                .flag("-std=c++14")
                 .flag(&format!("-D_GLIBCXX_USE_CXX11_ABI={}", libtorch_cxx11_abi))
                 .file("libtch/torch_api.cpp")
                 .compile("tch");
