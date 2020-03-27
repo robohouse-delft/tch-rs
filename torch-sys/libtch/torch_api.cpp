@@ -336,10 +336,12 @@ int at_save_image(tensor tensor, char *filename) {
 
 int at_get_num_interop_threads() {
   PROTECT(return at::get_num_interop_threads();)
+  return 0;
 }
 
 int at_get_num_threads() {
   PROTECT(return at::get_num_threads();)
+  return 0;
 }
 
 void at_set_num_interop_threads(int n_threads) {
